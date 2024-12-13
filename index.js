@@ -9,6 +9,28 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
+// configuración de cantidad de grupos y checkboxes
+const config = {
+    groups: [
+        {
+            id: "grupo1",
+            checkboxes: ["riego1", "riego2"]
+        },
+        {
+            id: "grupo2", 
+            checkboxes: ["riego1", "riego2"]
+        },
+        {
+            id: "grupo3",
+            checkboxes: ["riego1", "riego2"]  
+        },
+        {
+            id: "grupo4",
+            checkboxes: ["riego1", "riego2", "riego3"]  
+        }
+    ]
+};
+
 const datos = {
     /* lista: [] */
     // se almacena el estado de los checkboxes en formato JSON
@@ -18,6 +40,11 @@ const datos = {
 // Rutas
 app.get('/', (req, res) => {
     res.send('Bienvenido a la REST API con Node.js y import!');
+});
+
+// se envía la configuración
+app.get('/api/config', (req, res) => {
+    res.json(config);
 });
 
 // se envía el estado de los checkboxes

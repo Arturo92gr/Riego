@@ -9,30 +9,31 @@ const Cliente = {
             },
             body: JSON.stringify(data)
           })
-            .then(response => {
-              if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-              }
-              return response.json();
-            })
-            .then(data => {
-              console.log('Ítem creado:', data);
-            })
-            .catch(error => {
-              console.error('Error al crear el ítem:', error);
-            });
-          
+          .then(response => response.json())
+          .catch(error => console.error('Error:', error));
     }
 }
 
-const check1 = new Check(document.getElementById("grupo1"),Cliente);
-check1.addCheck("riego1");
-check1.addCheck("riego2");
+// se inicializan los grupos
+async function initializeGroups() {
+  try {
+      const response = await fetch('http://localhost:3000/api/config');
+      const config = await response.json();
+      
+      config.groups.forEach(group => {
+          const groupDiv = document.createElement('div');
+          groupDiv.id = group.id;
+          document.body.appendChild(groupDiv);
+          
+          const checkGroup = new Check(groupDiv, Cliente);
+          group.checkboxes.forEach(checkboxName => {
+              checkGroup.addCheck(checkboxName);
+          });
+      });
+  } catch (error) {
+      console.error('Error initializing groups:', error);
+  }
+}
 
-const check2 = new Check(document.getElementById("grupo2"),Cliente);
-check2.addCheck("riego1");
-check2.addCheck("riego2");
-
-const check3 = new Check(document.getElementById("grupo3"),Cliente);
-check3.addCheck("riego1");
-check3.addCheck("riego2");
+// se inicializan los grupos al cargar la página
+document.addEventListener('DOMContentLoaded', initializeGroups);
