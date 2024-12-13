@@ -7,12 +7,17 @@ export class Check {
 
     changeValue(name, value) {
         const data = this.states.find((item) => item.name == name);
+        // utilizando dataset se va a modificar el valor del atributo data-name
         if(data) {
             data.state = value;
             const check = this.parent.querySelector(`[data-name="${name}"]`);
             const span = check.querySelector('span');
             span.textContent = value ? 'ON' : 'OFF';
-            this.client.send({ name: name, state: value });
+            // se envía el cambio al servidor
+            this.client.send({ 
+                name: name, 
+                state: value
+            });
         }
     }
 

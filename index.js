@@ -10,7 +10,9 @@ app.use(cors());
 app.use(express.json());
 
 const datos = {
-    lista: []
+    /* lista: [] */
+    // se almacena el estado de los checkboxes en formato JSON
+    checkboxStates: {}
 }
 
 // Rutas
@@ -18,16 +20,23 @@ app.get('/', (req, res) => {
     res.send('Bienvenido a la REST API con Node.js y import!');
 });
 
+// se envía el estado de los checkboxes
 app.get('/api/items', (req, res) => {    
-    res.json(datos.lista);
+    /* res.json(datos.lista); */
+    
+    res.json(datos.checkboxStates);
 });
 
+// se recibe el estado de los checkboxes
 app.post('/api/items', (req, res) => {
-    const newItem = req.body;
-    console.log(`Llega ${newItem.name}`);
-    newItem.id = Date.now();
-    datos.lista.push(newItem);
-    res.status(201).json(newItem);
+    const {name, state} = req.body;
+    datos.checkboxStates[name] = state;
+    console.log(`Checkbox ${name} changed to ${state}`);
+    res.status(201).json({
+        name: name,
+        state: state,
+        timestamp: Date.now()
+    });
 });
 
 
