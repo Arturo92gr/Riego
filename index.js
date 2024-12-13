@@ -23,19 +23,28 @@ app.get('/', (req, res) => {
 // se envía el estado de los checkboxes
 app.get('/api/items', (req, res) => {    
     /* res.json(datos.lista); */
-    
+    console.log('Current states:', datos.checkboxStates); // debug
     res.json(datos.checkboxStates);
 });
 
 // se recibe el estado de los checkboxes
 app.post('/api/items', (req, res) => {
     const {name, state} = req.body;
+    // se almacena el estado del checkbox
     datos.checkboxStates[name] = state;
-    console.log(`Checkbox ${name} changed to ${state}`);
+
+    // debug
+    console.log('Updating checkbox state:');
+    console.log(`Name: ${name}`);
+    console.log(`State: ${state}`);
+    console.log('Current states:', datos.checkboxStates);
+
     res.status(201).json({
         name: name,
         state: state,
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        // se envía el estado de los checkboxes
+        allStates: datos.checkboxStates
     });
 });
 
